@@ -15,11 +15,11 @@ function pageReady() {
   localVideo = document.getElementById('localVideo');
   remoteVideo = document.getElementById('remoteVideo');
 
-  serverConnection = new WebSocket('wss://' + window.location.hostname + ':8443');
+  serverConnection = new WebSocket('wss://' + window.location.hostname + ':8445');
   serverConnection.onmessage = gotMessageFromServer;
 
   var constraints = {
-    video: true,
+    video: false,
     audio: true,
   };
 
