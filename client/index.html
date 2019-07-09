@@ -5367,6 +5367,49 @@
         return "D"+arr_aba+"\n";//izq_der
       }
     </script>
+
+    <script type="text/javascript">
+      /* Copyright (C) 2007 Richard Atterer, richard©atterer.net
+         This program is free software; you can redistribute it and/or modify it
+         under the terms of the GNU General Public License, version 2. See the file
+         COPYING for details. */
+
+      var imageNr = 0; // Serial number of current image
+      var finished = new Array(); // References to img objects which have finished downloading
+      var paused = false;
+
+      function createImageLayer() {
+        var img = new Image();
+        img.style.zIndex = -1;
+        img.style.position = "absolute";
+        img.style.top ="20px";
+        img.style.marginLeft ="10px";
+        img.onload = imageOnload;
+        img.onclick = imageOnclick;
+        img.src = null;
+        img.src = "http://192.168.0.138:8080/?action=snapshot&n=" + (++imageNr);
+        var webcam = document.getElementById("webcam");
+        webcam.insertBefore(img, webcam.firstChild);
+
+      }
+
+      // Two layers are always present (except at the very beginning), to avoid flicker
+      function imageOnload() {
+        this.style.zIndex = (imageNr%3); // Image finished, bring to front!
+        while (1 < finished.length) {
+          var del = finished.shift(); // Delete old image(s) from document
+          del.parentNode.removeChild(del);
+        }
+        finished.push(this);
+        if (!paused) createImageLayer();
+      }
+
+      function imageOnclick() { // Clicking on the image will pause the stream
+        paused = !paused;
+        if (!paused) createImageLayer();
+      }
+
+    </script>
     <style>
       .webcam {
         display: flex;
@@ -5374,12 +5417,12 @@
       }
       .controls {
         border: 1px solid #efefef;
-        padding: 5px;
+        padding: 50px;
         width: 150px;
         height: 100px;
         display:flex;
         align-items: center;
-        background: #ccc;
+
       }
       .direction-center {
         border: 0px solid blue;
@@ -5405,12 +5448,17 @@
       .show {
         display: block;
       }
+      #start {
+        z-index: 50;
+        position: absolute;
+      }
     </style>
   </head>
 
   <body>
+
   <div class="webcam">
-    <iframe src="https://localhost:8080/javascript_simple.html" width="600" height="600" border="0" ></iframe>
+    <div id="webcam"><noscript><img src="/?action=snapshot" /></noscript></div>
     <div class="controls">
       <img src="/img/left.png" class="direction" id="left" onclick="socket.emit('direction', { direction:moveLeft()});">
       <div class="direction-center">
@@ -5430,6 +5478,10 @@
     <script type="text/javascript">
         pageReady();
     </script>
-
+    <script type="text/javascript">
+      createImageLayer();
+    </script>
   </body>
 </html>
+
+

@@ -14,20 +14,7 @@ const serverConfig = {
 /*+++++++++++++++++++INICIO: +++++++++++++++++++++++++*/
 const SerialPort = require('serialport');
 var express = require('express');
-//var path = require('path');
 var app = express();
-
-/*
-var options = {
-  key: fs.readFileSync('./public/ssl/server.key'),
-  cert: fs.readFileSync('./public/ssl/server.crt')
-};
-*/
-/*
-var server = https.createServer(options, app).listen(portNumber, function () {
-  console.log('App listening on port '+portNumber+'!');
-});
-*/
 
 // Create a server for the client html page
 
@@ -60,17 +47,6 @@ const port = new SerialPort('/dev/ttyACM0', { baudRate: 9600 });
 //READLINE
 const Readline = require('@serialport/parser-readline');
 const parser = port.pipe(new Readline({ delimiter: '\n' }));
-
-//SET PUBLIC
-//app.use(express.static('client'));
-
-//GET DIRECTORY
-
-/*app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname+'/public/index.html'));
-});
-*/
-
 
 // Read the port data SERIAL
 
