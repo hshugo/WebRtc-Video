@@ -1,8 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="adapter.js"></script>
-    <script src="webrtc.js"></script>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <script src="js/adapter.js"></script>
+    <script src="js/webrtc.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/custom/move.js"></script>
+    <script src="js/custom/video.js"></script>
+    <script>
+      var socket = io('https://192.168.0.21:3006');
+      Move.init();
+      console.log(socket);
+    </script>
+    <link rel="stylesheet" type="text/css" href="styles/style.css">
   </head>
 
   <body>
@@ -10,14 +20,14 @@
   <div class="webcam">
     <div id="webcam"><noscript><img src="/?action=snapshot" /></noscript></div>
     <div class="controls">
-      <img src="/img/left.png" class="direction" id="left" onclick="socket.emit('direction', { direction:moveLeft()});">
+      <img src="/img/left.png" class="direction" id="left" onclick="Move.direction(socket,'left');">
       <div class="direction-center">
-        <img src="/img/up.png" class="direction" id="up" onclick="socket.emit('direction', { direction:moveUp()});">
-        <img src="img/pause.jpeg" class="direction hhandleRequestide" id="pause" onclick="socket.emit('direction', { direction:'pause'});">
+        <img src="/img/up.png" class="direction" id="up" onclick="Move.direction(socket,'up');">
+        <img src="img/pause.jpeg" class="direction" id="pause" onclick="socket.emit('direction', { direction:'pause'});">
         <img src="img/play.png" class="direction hide" id="play" onclick="socket.emit('direction', { direction:'play'});">
-        <img src="img/down.png" class="direction" id="down" onclick="socket.emit('direction', { direction:moveDown()});">
+        <img src="img/down.png" class="direction" id="down" onclick="Move.direction(socket,'down');">
       </div>
-      <img src="img/right.png" class="direction" id="right" onclick="socket.emit('direction', { direction:moveRight()});">
+      <img src="img/right.png" class="direction" id="right" onclick="Move.direction(socket,'right');">
     </div>
   </div>
     <video id="localVideo" autoplay muted style="width:5%;"></video>
@@ -26,9 +36,7 @@
     <input type="button" id="start" onclick="start(true)" value="Start Audio"></input>
 
     <script type="text/javascript">
-        pageReady();
-    </script>
-    <script type="text/javascript">
+      pageReady();
       createImageLayer();
     </script>
   </body>

@@ -1,4 +1,4 @@
-const HTTPS_PORT = 8445;
+const HTTPS_PORT = 8441;
 
 const fs = require('fs');
 const https = require('https');
@@ -9,6 +9,8 @@ const WebSocketServer = WebSocket.Server;
 const serverConfig = {
   key: fs.readFileSync('key.pem'),
   cert: fs.readFileSync('cert.pem'),
+  requestCert: false,
+  rejectUnauthorized: false
 };
 
 /*+++++++++++++++++++INICIO: +++++++++++++++++++++++++*/
@@ -37,8 +39,8 @@ const httpsServer = https.createServer(serverConfig, app);
 httpsServer.listen(HTTPS_PORT, '0.0.0.0');
 
 
-var portNumber = 3000;
-var server = app.listen(portNumber, function () {
+var portNumber = 3006;
+var server = https.createServer(serverConfig, app).listen(portNumber, function () {
   console.log('App listening on port '+portNumber+'!');
 });
 var io = require('socket.io').listen(server);
